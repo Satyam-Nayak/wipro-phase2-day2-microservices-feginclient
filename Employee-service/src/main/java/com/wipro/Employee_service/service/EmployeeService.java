@@ -1,9 +1,10 @@
 package com.wipro.Employee_service.service;
 
 import com.wipro.Employee_service.entity.Employee;
-import com.wipro.Employee_service.feign.CompanyClient;
-import com.wipro.Employee_service.feign.ProjectClient;
+import com.wipro.Employee_service.entity.Project;
 import com.wipro.Employee_service.repository.EmployeeRepository;
+import com.wipro.Employee_service.repository.ProjectRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +12,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private CompanyClient companyClient;
-
-    @Autowired
-    private ProjectClient projectClient;
+    private ProjectRepository projectRepository;
 
     public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+        return employeeRepository.saveAndFlush(employee);
     }
 
     public List<Employee> getAllEmployees() {
@@ -38,21 +37,7 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public Object getEmployeeWithCompany(Long employeeId) {
-        Optional<Employee> employee = employeeRepository.findById(employeeId);
-        if (employee.isPresent()) {
-            Object company = companyClient.getCompanyById(employee.get().getCompanyId());
-            return company;
-        }
-        return null;
-    }
-
-    public Object getEmployeeWithProject(Long employeeId) {
-        Optional<Employee> employee = employeeRepository.findById(employeeId);
-        if (employee.isPresent()) {
-            Object project = projectClient.getProjectById(employee.get().getProjectId());
-            return project;
-        }
-        return null;
+    public Optional<Project> getProjectByPcode(Long pcode) {
+        return projectRepository.findByPcode(pcode);
     }
 }

@@ -1,6 +1,7 @@
 package com.wipro.Employee_service.controller;
 
 import com.wipro.Employee_service.entity.Employee;
+import com.wipro.Employee_service.entity.Project;
 import com.wipro.Employee_service.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,8 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
     }
 
-    @GetMapping("/{id}/company")
-    public Object getEmployeeWithCompany(@PathVariable Long id) {
-        return employeeService.getEmployeeWithCompany(id);
-    }
-
-    @GetMapping("/{id}/project")
-    public Object getEmployeeWithProject(@PathVariable Long id) {
-        return employeeService.getEmployeeWithProject(id);
+    @GetMapping("/project/{pcode}")
+    public Optional<Project> getProjectByPcode(@PathVariable Long pcode) {
+        return employeeService.getProjectByPcode(pcode);
     }
 }

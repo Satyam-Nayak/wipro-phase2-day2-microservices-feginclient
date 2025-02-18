@@ -9,23 +9,34 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false) // Name cannot be null
     private String name;
+
     private String designation;
     private Double salary;
-    private Long companyId; // Foreign key reference to Company
-    private Long projectId; // Foreign key reference to Project
 
+    @ManyToOne
+    @JoinColumn(name = "pcode", referencedColumnName = "pcode", nullable = false)
+    private Project project;
+
+    @Version // Helps handle concurrent updates
+    private Integer version;
+
+    // Default Constructor (Required by JPA)
     public Employee() {
     }
 
-    public Employee(Long id, String name, String designation, Double salary, Long companyId, Long projectId) {
+    // Parameterized Constructor
+    public Employee(Long id, String name, String designation, Double salary, Project project) {
         this.id = id;
         this.name = name;
         this.designation = designation;
         this.salary = salary;
-        this.companyId = companyId;
-        this.projectId = projectId;
+        this.project = project;
     }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -59,19 +70,19 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public Integer getVersion() {
+        return version;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
