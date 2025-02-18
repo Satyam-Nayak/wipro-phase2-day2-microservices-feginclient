@@ -12,11 +12,13 @@ eureka:
 server:
   port: 9100
 
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
 
 springdoc:
   api-docs:
